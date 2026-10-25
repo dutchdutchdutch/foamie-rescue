@@ -36,9 +36,18 @@ Short and verb-first, the Patagonia way:
   - "Before you buy one, adopt one."
   - "Ready to surf as-is?" (yes / no)
 
+## What the PetSpace homepage does (from screenshot)
+
+- Tagline with heart: **"Where people & pets connect"**. Ours could be "Where surfers & foamies connect."
+- Friendly **cartoon mascots** (a dog and cat in hats) in the top banner, next to a big headline and one orange button: **"See who's waiting…"**
+- **"Adoptable Pets"** row of big cards. Each has a green **"Adoptable"** badge, the pet's name, a "Meet Shay!" blurb, three small icon facts (age, sex, weight), and "Learn More".
+- Lots of white space, light gray sections, rounded orange buttons, a playful multicolor logo.
+
 ## Look and feel (ideas)
 
-- **Board profile cards** like pet adoption cards: big photo, name, town, "Ready to surf" or "Upcycle only" tag, and an "I'd like this board" button.
+- **Board profile cards** copied from that layout: big photo, a badge (**"Ready to surf"** in green or **"Upcycle only"**), the board's name, a "Meet Big Blue!" blurb, three icon facts (**length, town, days listed**), and "I'd like this board".
+- **Homepage banner** with an illustrated foamie mascot and one button: "See who's waiting…"
+- **One warm button color** (like PetSpace orange) used everywhere, and a green badge for "ready".
 - **A map of boards near you**, like Action Works, starting with Orange County.
 - **Real photos** of real boards and people at real beaches. No polished stock photos.
 - **Colors:** sunny and beachy, with one strong accent for buttons. To be explored.
