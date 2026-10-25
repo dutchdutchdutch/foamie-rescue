@@ -27,6 +27,7 @@ The spec has things that happen after some days (reminder at day 20, expire at d
 
 - Each time a page loads, the site checks dates. A listing older than 30 days just stops showing.
 - An admin page has a **"Run daily checks"** button. Click it and the site writes any due reminders into the pretend inbox.
+- The same page has a **pretend clock** that jumps the site ahead by days, so the 20- and 30-day rules can be tried right away.
 
 ## Pages (first version)
 

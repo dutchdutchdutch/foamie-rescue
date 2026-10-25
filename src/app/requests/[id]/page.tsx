@@ -5,7 +5,8 @@ import { BoardPicture } from "@/components/BoardPicture";
 import { currentPerson } from "@/lib/auth";
 import { getBoard } from "@/lib/boards";
 import { contactOf, getRequest, whenText } from "@/lib/requests";
-import { answerAction } from "../actions";
+import { answerAction, giverReportAction } from "../actions";
+import { TakerReport } from "./TakerReport";
 
 export default function RequestPage(props: PageProps<"/requests/[id]">) {
   return (
@@ -89,6 +90,40 @@ async function RequestView({ params }: Pick<PageProps<"/requests/[id]">, "params
           {isTaker && <p className="mt-2 text-sm text-white/85">The owner may say yes to others too. First to show up gets it.</p>}
         </div>
       )}
+
+      {/* After a yes: did it find a home? */}
+      {isTaker && req.status === "yes" && !req.takerReported && (board.status === "listed" || req.handoff === "done") && (
+        <TakerReport requestId={req.id} boardName={board.name} />
+      )}
+      {isGiver && req.status === "yes" && req.handoff === null && board.status === "listed" && (
+        <div className="mt-8 rounded-3xl bg-sand p-6">
+          <p className="text-lg font-extrabold text-sea-dark">Did {board.name} find a home with them?</p>
+          <div className="mt-4 flex flex-wrap gap-3">
+            <form action={giverReportAction}>
+              <input type="hidden" name="requestId" value={req.id} />
+              <button name="happened" value="yes" className="rounded-full bg-kelp px-6 py-2.5 font-bold text-white hover:opacity-90">
+                Yes, they picked it up
+              </button>
+            </form>
+            <form action={giverReportAction}>
+              <input type="hidden" name="requestId" value={req.id} />
+              <button name="happened" value="no" className="rounded-full border-2 border-gray-300 px-6 py-2.5 font-bold text-gray-700 hover:border-gray-400">
+                No, it didn&apos;t happen
+              </button>
+            </form>
+          </div>
+        </div>
+      )}
+      {req.handoff === "done" && (
+        <div className="mt-8 rounded-3xl bg-sea p-6 text-white">
+          <p className="text-lg font-extrabold">🎉 {board.name} found a home!</p>
+          {req.takerPhoto && (
+            // eslint-disable-next-line @next/next/no-img-element -- local photo
+            <img src={`/photos/${req.takerPhoto}`} alt={`${board.name} with its new owner`} className="mt-4 max-h-80 rounded-2xl" />
+          )}
+        </div>
+      )}
+      {req.handoff === "failed" && <p className="mt-8 rounded-3xl bg-sand p-6 text-gray-700">This pickup didn&apos;t happen.</p>}
 
       {isTaker && req.status === "no" && (
         <p className="mt-8 rounded-3xl bg-sand p-6 text-gray-700">

@@ -1,4 +1,5 @@
 import "server-only";
+import { nowIso } from "./clock";
 import { db } from "./db";
 
 // The pretend inbox. Instead of really sending an email or text, the site
@@ -10,7 +11,7 @@ export function send(to: string, subject: string, body: string) {
     to,
     subject,
     body,
-    new Date().toISOString(),
+    nowIso(),
   );
 }
 

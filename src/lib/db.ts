@@ -12,6 +12,8 @@ export const photoDir = path.join(dataDir, "photos");
 function open() {
   mkdirSync(photoDir, { recursive: true });
   const db = new DatabaseSync(path.join(/*turbopackIgnore: true*/ dataDir, "foamie-rescue.db"));
+  // Wait a moment instead of failing when another process is using the file.
+  db.exec("PRAGMA busy_timeout = 5000; PRAGMA journal_mode = WAL;");
   db.exec(`
     CREATE TABLE IF NOT EXISTS boards (
       id TEXT PRIMARY KEY,
@@ -55,6 +57,10 @@ function open() {
       answered_at TEXT,
       UNIQUE (board_id, taker_id)
     );
+    CREATE TABLE IF NOT EXISTS settings (
+      key TEXT PRIMARY KEY,
+      value TEXT NOT NULL
+    );
     CREATE TABLE IF NOT EXISTS outbox (
       id INTEGER PRIMARY KEY,
       to_contact TEXT NOT NULL,
@@ -64,6 +70,14 @@ function open() {
     );
   `);
   addColumnIfMissing(db, "boards", "owner_id", "INTEGER REFERENCES people(id)");
+  addColumnIfMissing(db, "boards", "status", "TEXT NOT NULL DEFAULT 'listed'"); // listed, gone, adopted
+  addColumnIfMissing(db, "boards", "listed_at", "TEXT"); // set when relisted; otherwise created_at counts
+  addColumnIfMissing(db, "boards", "reminded_at", "TEXT");
+  addColumnIfMissing(db, "requests", "handoff", "TEXT"); // done or failed, once someone tells us
+  addColumnIfMissing(db, "requests", "would_buy", "TEXT"); // yes, no or maybe: would the taker have bought a new one?
+  addColumnIfMissing(db, "requests", "taker_photo", "TEXT");
+  addColumnIfMissing(db, "requests", "taker_reported_at", "TEXT");
+  addColumnIfMissing(db, "requests", "followup_sent_at", "TEXT");
   const { count } = db.prepare("SELECT COUNT(*) AS count FROM boards").get() as { count: number };
   if (count === 0) addExamples(db);
   return db;
@@ -81,7 +95,7 @@ function addColumnIfMissing(db: DatabaseSync, table: string, column: string, typ
 
 function addExamples(db: DatabaseSync) {
   const insert = db.prepare(`
-    INSERT INTO boards (id, name, blurb, ready_to_ride, length_ft, town, color, is_example, created_at)
+    INSERT OR IGNORE INTO boards (id, name, blurb, ready_to_ride, length_ft, town, color, is_example, created_at)
     VALUES (?, ?, ?, ?, ?, ?, ?, 1, ?)
   `);
   for (const b of exampleBoards) {

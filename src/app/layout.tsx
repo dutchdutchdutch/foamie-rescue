@@ -42,7 +42,12 @@ export default function RootLayout({ children }: LayoutProps<"/">) {
             <p>
               <span className="font-bold text-sea-dark">{site.name}</span> · {site.tagline}
             </p>
-            <p>Free, always. No fees, no deposits, no catch. Starting in {site.area}.</p>
+            <p>
+              Free, always. No fees, no deposits, no catch. Starting in {site.area}. ·{" "}
+              <Link href="/admin" className="underline hover:text-sea-dark">
+                Behind the scenes
+              </Link>
+            </p>
           </div>
         </footer>
       </body>

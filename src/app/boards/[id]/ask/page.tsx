@@ -3,7 +3,7 @@ import { notFound, redirect } from "next/navigation";
 import { Suspense } from "react";
 import { BoardPicture } from "@/components/BoardPicture";
 import { currentPerson } from "@/lib/auth";
-import { getBoard } from "@/lib/boards";
+import { getBoard, isOpen } from "@/lib/boards";
 import { findRequest, soonOptions, windowOptions } from "@/lib/requests";
 import { AskForm } from "./AskForm";
 
@@ -23,7 +23,7 @@ async function Ask({ params }: Pick<PageProps<"/boards/[id]/ask">, "params">) {
   if (!board) notFound();
   const person = await currentPerson();
   if (!person) redirect(`/signin?next=${encodeURIComponent(`/boards/${id}/ask`)}`);
-  if (board.ownerId === null || board.ownerId === person.id) redirect(`/boards/${id}`);
+  if (board.ownerId === null || board.ownerId === person.id || !isOpen(board)) redirect(`/boards/${id}`);
   const existing = findRequest(board.id, person.id);
   if (existing) redirect(`/requests/${existing.id}`);
 

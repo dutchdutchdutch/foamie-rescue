@@ -2,6 +2,7 @@ import type { Metadata } from "next";
 import Link from "next/link";
 import { redirect } from "next/navigation";
 import { Suspense } from "react";
+import { OwnerButtons, statusLabel } from "@/components/OwnerButtons";
 import { currentPerson } from "@/lib/auth";
 import { listBoardsByOwner } from "@/lib/boards";
 import { requestsByTaker, requestsForBoard, whenText, type Status } from "@/lib/requests";
@@ -44,9 +45,15 @@ async function Mine() {
             const reqs = requestsForBoard(b.id);
             return (
               <li key={b.id} className="rounded-3xl border border-gray-100 p-5 shadow-sm">
-                <Link href={`/boards/${b.id}`} className="text-lg font-extrabold text-sea hover:underline">
-                  {b.name}
-                </Link>
+                <div className="flex flex-wrap items-center justify-between gap-3">
+                  <p>
+                    <Link href={`/boards/${b.id}`} className="text-lg font-extrabold text-sea hover:underline">
+                      {b.name}
+                    </Link>{" "}
+                    <span className="text-sm text-gray-600">· {statusLabel(b)}</span>
+                  </p>
+                  <OwnerButtons board={b} back="mine" />
+                </div>
                 {reqs.length === 0 ? (
                   <p className="mt-1 text-sm text-gray-600">Nobody has asked yet.</p>
                 ) : (
