@@ -5,8 +5,9 @@ import { Suspense } from "react";
 import { Fact } from "@/components/BoardCard";
 import { BoardPicture } from "@/components/BoardPicture";
 import { ReadyBadge } from "@/components/ReadyBadge";
-import { SoonButton } from "@/components/SoonButton";
-import { daysListed, getBoard } from "@/lib/boards";
+import { currentPerson } from "@/lib/auth";
+import { daysListed, getBoard, type Board } from "@/lib/boards";
+import { findRequest, requestsForBoard } from "@/lib/requests";
 
 export default function BoardPage(props: PageProps<"/boards/[id]">) {
   return (
@@ -65,9 +66,47 @@ async function BoardProfile({
               : "Not ready to surf as it is. Great for fixing up, or for a shaper to reuse the foam."}
           </p>
           {board.isExample && <p className="text-sm text-gray-500">This is an example board, not a real one.</p>}
-          <SoonButton className="mt-2 self-start px-8 py-3">I&apos;d like this board</SoonButton>
+          <AskArea board={board} />
         </div>
       </div>
     </>
+  );
+}
+
+// The "I'd like this board" button, or what to show instead.
+async function AskArea({ board }: { board: Board }) {
+  if (board.isExample) {
+    return <p className="mt-2 text-sm text-gray-500">Example boards can&apos;t be asked for. List a real one to try it out!</p>;
+  }
+  const person = await currentPerson();
+  const askLink = `/boards/${board.id}/ask`;
+  const button = "mt-2 self-start rounded-full bg-cta px-8 py-3 text-lg font-bold text-white hover:bg-cta-dark";
+  if (!person) {
+    return (
+      <Link href={`/signin?next=${encodeURIComponent(askLink)}`} className={button}>
+        I&apos;d like this board
+      </Link>
+    );
+  }
+  if (board.ownerId === person.id) {
+    const count = requestsForBoard(board.id).length;
+    return (
+      <Link href="/mine" className="mt-2 self-start font-bold text-sea hover:underline">
+        This is your board · {count} {count === 1 ? "ask" : "asks"} so far →
+      </Link>
+    );
+  }
+  const existing = findRequest(board.id, person.id);
+  if (existing) {
+    return (
+      <Link href={`/requests/${existing.id}`} className="mt-2 self-start font-bold text-sea hover:underline">
+        You asked for {board.name} · see the answer →
+      </Link>
+    );
+  }
+  return (
+    <Link href={askLink} className={button}>
+      I&apos;d like this board
+    </Link>
   );
 }

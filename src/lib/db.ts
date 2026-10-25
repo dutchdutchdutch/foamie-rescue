@@ -43,6 +43,18 @@ function open() {
       person_id INTEGER NOT NULL REFERENCES people(id),
       created_at TEXT NOT NULL
     );
+    CREATE TABLE IF NOT EXISTS requests (
+      id INTEGER PRIMARY KEY,
+      board_id TEXT NOT NULL REFERENCES boards(id),
+      taker_id INTEGER NOT NULL REFERENCES people(id),
+      soon TEXT NOT NULL,      -- how soon they can pick it up
+      windows TEXT NOT NULL,   -- "anytime", or 3-hour windows joined by commas
+      note TEXT NOT NULL DEFAULT '',
+      status TEXT NOT NULL DEFAULT 'waiting', -- waiting, yes, no
+      created_at TEXT NOT NULL,
+      answered_at TEXT,
+      UNIQUE (board_id, taker_id)
+    );
     CREATE TABLE IF NOT EXISTS outbox (
       id INTEGER PRIMARY KEY,
       to_contact TEXT NOT NULL,

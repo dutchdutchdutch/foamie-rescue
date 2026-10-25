@@ -77,7 +77,11 @@ Then start it again with `npm run dev`.
 - **Home** (http://localhost:3000): the newest boards.
 - **Adopt** (http://localhost:3000/boards): all boards, with filters for "Ready to ride" and "Needs some love".
 - **Give a board** (http://localhost:3000/give): first confirm your phone or email, then list a board with a photo. You land on its profile page.
+- **I'd like this board**: on a board's page, ask for it and say when you could pick it up. The owner gets a message in the pretend inbox and says yes or no. On yes, you both see each other's phone or email.
+- **Mine** (http://localhost:3000/mine): your boards, who asked for them, and the boards you asked for.
 - **📬 Pretend inbox** (http://localhost:3000/inbox): the site doesn't send real emails or texts. Every message it *would* send shows up here instead, like your 6-digit sign-in code. Use any phone number or email you like; nothing is really sent.
+
+**Tip for trying both sides:** use a normal browser window as the giver and a private window (`Cmd + Shift + N` in Chrome, `Cmd + Shift + P` in Firefox, `Cmd + Shift + N` in Safari) as the person asking. Sign in with a different phone or email in each.
 
 ## Where your test boards are saved
 

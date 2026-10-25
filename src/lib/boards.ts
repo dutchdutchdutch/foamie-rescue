@@ -13,6 +13,7 @@ export type Board = {
   photo: string | null; // file name in data/photos, served at /photos/<file>
   color: string | null; // drawing color for example boards without a photo
   isExample: boolean;
+  ownerId: number | null;
   createdAt: string;
 };
 
@@ -30,6 +31,7 @@ type Row = {
   photo: string | null;
   color: string | null;
   is_example: number;
+  owner_id: number | null;
   created_at: string;
 };
 
@@ -46,6 +48,7 @@ function toBoard(r: Row): Board {
     photo: r.photo,
     color: r.color,
     isExample: r.is_example === 1,
+    ownerId: r.owner_id,
     createdAt: r.created_at,
   };
 }
@@ -68,6 +71,11 @@ export function addBoard(id: string, ownerId: number, b: NewBoard) {
     INSERT INTO boards (id, owner_id, name, blurb, ready_to_ride, length_ft, brand, town, zip, photo, created_at)
     VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?)
   `).run(id, ownerId, b.name, b.blurb, b.readyToRide ? 1 : 0, b.lengthFt, b.brand, b.town, b.zip, b.photo, new Date().toISOString());
+}
+
+export function listBoardsByOwner(ownerId: number): Board[] {
+  const rows = db.prepare("SELECT * FROM boards WHERE owner_id = ? ORDER BY created_at DESC").all(ownerId) as Row[];
+  return rows.map(toBoard);
 }
 
 export function daysListed(board: Board, now = Date.now()) {

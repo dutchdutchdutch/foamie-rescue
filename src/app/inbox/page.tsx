@@ -1,4 +1,5 @@
 import type { Metadata } from "next";
+import Link from "next/link";
 import { connection } from "next/server";
 import { Suspense } from "react";
 import { listMessages } from "@/lib/outbox";
@@ -36,9 +37,24 @@ async function Messages() {
             {new Date(m.createdAt).toLocaleString("en-US", { dateStyle: "medium", timeStyle: "short" })}
           </p>
           <h2 className="mt-1 text-lg font-extrabold text-sea-dark">{m.subject}</h2>
-          <p className="mt-2 whitespace-pre-line text-gray-700">{m.body}</p>
+          <p className="mt-2 whitespace-pre-line text-gray-700">
+            <WithLinks text={m.body} />
+          </p>
         </li>
       ))}
     </ul>
+  );
+}
+
+// Turns site paths like /requests/3 in a message into links.
+function WithLinks({ text }: { text: string }) {
+  return text.split(/(?<=^|\s)(\/[a-z][a-z0-9/_-]*)/).map((part, i) =>
+    i % 2 === 1 ? (
+      <Link key={i} href={part} className="font-bold text-sea underline">
+        {part}
+      </Link>
+    ) : (
+      part
+    ),
   );
 }

@@ -13,10 +13,15 @@ export async function AccountLinks() {
     );
   }
   return (
-    <form action={signOutAction}>
-      <button type="submit" title={`Signed in as ${person.contact}`} className="rounded-full px-3 py-2 text-sea-dark hover:bg-sand">
-        Sign out
-      </button>
-    </form>
+    <>
+      <Link href="/mine" className="rounded-full px-3 py-2 text-sea-dark hover:bg-sand">
+        Mine
+      </Link>
+      <form action={signOutAction}>
+        <button type="submit" title={`Signed in as ${person.contact}`} className="rounded-full px-3 py-2 text-sea-dark hover:bg-sand">
+          Sign out
+        </button>
+      </form>
+    </>
   );
 }
