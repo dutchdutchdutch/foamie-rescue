@@ -1,0 +1,17 @@
+@import "tailwindcss";
+
+@theme {
+  --color-sand: #fff8ec;
+  --color-sun: #f2994a;
+  --color-sun-dark: #d9772a;
+  --color-sea: #1f6f8b;
+  --color-sea-dark: #164e63;
+  --color-kelp: #2f9e63;
+  --color-coral: #e5674e;
+  --font-sans: ui-rounded, "SF Pro Rounded", system-ui, -apple-system, "Segoe UI", sans-serif;
+}
+
+body {
+  background: #ffffff;
+  color: #1f2937;
+}
