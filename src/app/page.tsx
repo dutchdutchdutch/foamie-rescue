@@ -1,12 +1,14 @@
-import { BoardCard, type Board } from "@/components/BoardCard";
+import Link from "next/link";
+import { BoardCard } from "@/components/BoardCard";
 import { FoamieArt } from "@/components/FoamieArt";
+import { SoonButton } from "@/components/SoonButton";
+import { sampleBoards } from "@/lib/boards";
 import { site } from "@/lib/site";
 
-// Pretend boards so the page doesn't look empty. Real listings come in a later step.
-const sampleBoards: Board[] = [
-  { name: "Big Blue", blurb: "A few dings, loves small days.", readyToRide: true, lengthFt: 8, town: "Huntington Beach", daysListed: 3, color: "#3b82c4" },
-  { name: "Sunny", blurb: "Perfect first board for a kid.", readyToRide: true, lengthFt: 7, town: "Costa Mesa", daysListed: 1, color: "#f2c94c" },
-  { name: "Old Red", blurb: "Snapped tail. Great foam for a shaper.", readyToRide: false, lengthFt: 9, town: "San Clemente", daysListed: 12, color: "#e5674e" },
+const steps = [
+  { icon: "🔎", title: "Find a board", text: `Browse foamies near you in ${site.area}. Each one has a name and a photo.` },
+  { icon: "🙋", title: "Ask for it", text: "Tap “I'd like this board” and say when you can pick it up. The owner says yes or no." },
+  { icon: "🏄", title: "Pick it up and surf", text: "Once you both say yes, you swap contact info and meet up. Free, no catch." },
 ];
 
 const values = [
@@ -15,11 +17,14 @@ const values = [
   { title: "Every board has a story.", text: "Boards get a name and a profile, like a rescue pup." },
 ];
 
+const giveSteps = ["Snap a photo", "Add your town or zip (never your address)", "Say if it's ready to ride"];
+
 export default function Home() {
   return (
     <>
+      {/* 1. Hero: lead with the free pickup. Givers get a quieter second link. */}
       <section className="bg-sand">
-        <div className="mx-auto flex max-w-5xl flex-col items-center gap-8 px-4 py-16 sm:flex-row">
+        <div className="mx-auto flex max-w-5xl flex-col items-center gap-10 px-4 py-14 sm:flex-row sm:py-20">
           <div className="flex-1">
             <p className="font-bold text-sun-dark">{site.tagline}</p>
             <h1 className="mt-2 text-4xl font-extrabold leading-tight text-sea-dark sm:text-5xl">
@@ -30,52 +35,80 @@ export default function Home() {
             <p className="mt-4 max-w-md text-lg text-gray-700">
               Before you buy one, adopt one. Local boards in {site.area} are waiting for a new home.
             </p>
-            <a
-              href="#waiting"
-              className="mt-8 inline-block rounded-full bg-sun px-8 py-3 text-lg font-bold text-white hover:bg-sun-dark"
-            >
-              See who&apos;s waiting…
-            </a>
+            <div className="mt-8 flex flex-wrap items-center gap-x-6 gap-y-4">
+              <Link
+                href="#waiting"
+                className="inline-block rounded-full bg-cta px-8 py-3 text-lg font-bold text-white hover:bg-cta-dark"
+              >
+                See who&apos;s waiting…
+              </Link>
+              <Link href="#give" className="font-bold text-sea underline-offset-4 hover:underline">
+                Got one to give? →
+              </Link>
+            </div>
           </div>
-          <div className="flex gap-2">
+          <div className="hidden gap-2 sm:flex">
             <FoamieArt color="#3b82c4" className="h-56 -rotate-6" />
             <FoamieArt color="#f2c94c" className="h-48 rotate-6" />
           </div>
         </div>
       </section>
 
-      <section id="waiting" className="mx-auto max-w-5xl px-4 py-14">
+      {/* 2. The boards. */}
+      <section id="waiting" className="mx-auto max-w-5xl scroll-mt-16 px-4 py-14">
         <h2 className="text-3xl font-extrabold text-sea-dark">Boards waiting for a home</h2>
-        <p className="mt-1 text-gray-600">These are pretend boards for now.</p>
+        <p className="mt-1 text-gray-600">These are pretend boards for now. Real ones come soon.</p>
         <div className="mt-8 grid gap-6 sm:grid-cols-2 lg:grid-cols-3">
           {sampleBoards.map((board) => (
-            <BoardCard key={board.name} board={board} />
+            <BoardCard key={board.id} board={board} />
           ))}
         </div>
       </section>
 
+      {/* 3. How it works, so a first-time visitor knows what happens after they click. */}
+      <section className="border-t border-gray-100">
+        <div className="mx-auto max-w-5xl px-4 py-14">
+          <h2 className="text-3xl font-extrabold text-sea-dark">How adopting works</h2>
+          <ol className="mt-8 grid gap-6 sm:grid-cols-3">
+            {steps.map((s, i) => (
+              <li key={s.title} className="rounded-3xl bg-sand p-6">
+                <p className="text-3xl" aria-hidden="true">{s.icon}</p>
+                <h3 className="mt-3 text-lg font-extrabold text-sea">
+                  {i + 1}. {s.title}
+                </h3>
+                <p className="mt-1 text-gray-700">{s.text}</p>
+              </li>
+            ))}
+          </ol>
+        </div>
+      </section>
+
+      {/* 4. Why we do it. */}
       <section className="bg-sea text-white">
         <div className="mx-auto grid max-w-5xl gap-8 px-4 py-14 sm:grid-cols-3">
           {values.map((v) => (
             <div key={v.title}>
               <h3 className="text-xl font-extrabold">{v.title}</h3>
-              <p className="mt-2 text-white/80">{v.text}</p>
+              <p className="mt-2 text-white/85">{v.text}</p>
             </div>
           ))}
         </div>
       </section>
 
-      <section className="mx-auto max-w-5xl px-4 py-14 text-center">
+      {/* 5. Givers. Make it feel quick and good. */}
+      <section id="give" className="mx-auto max-w-5xl scroll-mt-16 px-4 py-16 text-center">
         <h2 className="text-3xl font-extrabold text-sea-dark">Got a foamie in the garage?</h2>
-        <p className="mt-2 text-gray-600">Give it a second life. It takes a photo and a minute.</p>
-        <button
-          type="button"
-          disabled
-          title="Coming soon"
-          className="mt-6 rounded-full border-2 border-sun px-8 py-3 font-bold text-sun-dark opacity-60"
-        >
-          List a board (coming soon)
-        </button>
+        <p className="mx-auto mt-2 max-w-lg text-gray-600">
+          Give it a second life and keep a new one from being made. It takes a minute.
+        </p>
+        <ul className="mt-6 flex flex-col items-center justify-center gap-2 text-gray-700 sm:flex-row sm:gap-6">
+          {giveSteps.map((g) => (
+            <li key={g}>
+              <span className="font-bold text-kelp" aria-hidden="true">✓</span> {g}
+            </li>
+          ))}
+        </ul>
+        <SoonButton className="mt-8 px-8 py-3">List a board</SoonButton>
       </section>
     </>
   );
