@@ -28,6 +28,8 @@ Runner-up: **Twilio**, if we ever want the easiest setup and the most how-to gui
 | Bandwidth | on request | ~$0.006 | ? | ? | Yes | Not self-serve; for huge senders |
 | Textbelt | none (shared) | paid credits | US replies only | No | No | No own number, no photos. Ruled out |
 
+**Also considered: Google Voice.** It didn't make the cut. It has no official way for an app to send or read texts, and Google's rules ban automated messages, so the number could get shut off. It would only work as a free number someone answers by hand, for example to test whether people actually text in boards.
+
 **Carrier fees** are added on top by AT&T, T-Mobile and Verizon. They are about the same everywhere: roughly half a cent per text and about one cent per photo text.
 
 ## Sign-up rules (same on every provider)
