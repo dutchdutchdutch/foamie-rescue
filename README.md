@@ -22,7 +22,7 @@ Node.js is the free program that runs the website.
    node -v
    ```
 
-   You should see a number like `v22.x.x` or higher.
+   You should see a number like `v22.13.0` or higher.
 
 ### 2. Get the code (one time)
 
@@ -54,6 +54,8 @@ Wait until you see `Ready`. Then open this link in your browser:
 
 "localhost" means "this computer". Only you can see it.
 
+You may see a yellow-ish line in Terminal that says `ExperimentalWarning: SQLite`. That's harmless. It's the small database built into Node.js.
+
 ### 4. Stop the website
 
 Click on the Terminal window and press `Ctrl + C`.
@@ -69,6 +71,18 @@ npm install
 ```
 
 Then start it again with `npm run dev`.
+
+## What you can try
+
+- **Home** (http://localhost:3000): the newest boards.
+- **Adopt** (http://localhost:3000/boards): all boards, with filters for "Ready to ride" and "Needs some love".
+- **Give a board** (http://localhost:3000/give): list a board with a photo. You land on its profile page.
+
+## Where your test boards are saved
+
+Boards and photos you add are saved in the `data` folder inside the project. Only on your Mac, never uploaded.
+
+To start fresh, stop the website, delete the `data` folder, and start it again. You'll get the three example boards back.
 
 ## Changing the name
 
