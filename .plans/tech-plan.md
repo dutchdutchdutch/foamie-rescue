@@ -15,8 +15,8 @@ Draft, 2026-10-25. Goes with [foamie-rescue-spec.md](foamie-rescue-spec.md) and 
 |---|---|---|
 | Website | **Next.js** (with TypeScript) | One project for pages and server code. It's what Vercel is built for, so moving later is easy. |
 | Look | **Tailwind CSS** | Quick to style the warm, rounded PetSpace look. |
-| Data | **SQLite** (one file on your Mac) through **Prisma** | No database to install. Later, change one line to point at a free hosted database. |
-| Photos | Saved in a folder in the project (`uploads/`) | Later, swap for Vercel Blob or Firebase Storage. |
+| Data | **SQLite** (one file on your Mac), using the one built into Node.js | No database to install, nothing extra to download. All database code is in two small files (`src/lib/db.ts` and `src/lib/boards.ts`), so moving to a free hosted database later means rewriting just those. |
+| Photos | Saved in a folder in the project (`data/photos/`) | Later, swap for Vercel Blob or Firebase Storage. |
 | Email / phone check | **Fake.** The 6-digit code shows in the pretend inbox. | Real email/SMS needs outside accounts. Plug in later. |
 
 All you need on your Mac is **Node.js** (free, one installer). The README will walk you through it: download, install, run, open the link.
