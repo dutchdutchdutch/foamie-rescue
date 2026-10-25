@@ -1,8 +1,10 @@
 import Link from "next/link";
+import { connection } from "next/server";
+import { Suspense } from "react";
 import { BoardCard } from "@/components/BoardCard";
+import { BoardGridSkeleton } from "@/components/BoardGridSkeleton";
 import { FoamieArt } from "@/components/FoamieArt";
-import { SoonButton } from "@/components/SoonButton";
-import { sampleBoards } from "@/lib/boards";
+import { listBoards } from "@/lib/boards";
 import { site } from "@/lib/site";
 
 const steps = [
@@ -57,12 +59,13 @@ export default function Home() {
       {/* 2. The boards. */}
       <section id="waiting" className="mx-auto max-w-5xl scroll-mt-16 px-4 py-14">
         <h2 className="text-3xl font-extrabold text-sea-dark">Boards waiting for a home</h2>
-        <p className="mt-1 text-gray-600">These are pretend boards for now. Real ones come soon.</p>
-        <div className="mt-8 grid gap-6 sm:grid-cols-2 lg:grid-cols-3">
-          {sampleBoards.map((board) => (
-            <BoardCard key={board.id} board={board} />
-          ))}
-        </div>
+        <p className="mt-1 text-gray-600">The newest boards near you.</p>
+        <Suspense fallback={<BoardGridSkeleton count={3} />}>
+          <NewestBoards />
+        </Suspense>
+        <Link href="/boards" className="mt-8 inline-block font-bold text-cta hover:underline">
+          See all boards →
+        </Link>
       </section>
 
       {/* 3. How it works, so a first-time visitor knows what happens after they click. */}
@@ -108,8 +111,25 @@ export default function Home() {
             </li>
           ))}
         </ul>
-        <SoonButton className="mt-8 px-8 py-3">List a board</SoonButton>
+        <Link
+          href="/give"
+          className="mt-8 inline-block rounded-full bg-cta px-8 py-3 text-lg font-bold text-white hover:bg-cta-dark"
+        >
+          List a board
+        </Link>
       </section>
     </>
+  );
+}
+
+async function NewestBoards() {
+  await connection(); // read fresh boards on every visit
+  const boards = listBoards("all", 3);
+  return (
+    <div className="mt-8 grid gap-6 sm:grid-cols-2 lg:grid-cols-3">
+      {boards.map((board) => (
+        <BoardCard key={board.id} board={board} />
+      ))}
+    </div>
   );
 }
