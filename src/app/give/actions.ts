@@ -2,6 +2,7 @@
 
 import { randomBytes } from "node:crypto";
 import { redirect } from "next/navigation";
+import { currentPerson } from "@/lib/auth";
 import { addBoard } from "@/lib/boards";
 import { savePhoto } from "@/lib/photos";
 
@@ -26,6 +27,9 @@ export async function listBoard(_prev: GiveState, form: FormData): Promise<GiveS
   };
   const fail = (error: string): GiveState => ({ error, values });
 
+  const person = await currentPerson();
+  if (!person) return fail("Please confirm your phone or email first. Reload the page to do that.");
+
   const photo = form.get("photo");
   if (!(photo instanceof File) || photo.size === 0) return fail("Please add a photo of the board. No photo, no listing.");
   if (values.ready !== "yes" && values.ready !== "no") return fail("Please say if it can go surfing today.");
@@ -41,7 +45,7 @@ export async function listBoard(_prev: GiveState, form: FormData): Promise<GiveS
   const slug = name.toLowerCase().replace(/[^a-z0-9]+/g, "-").replace(/^-|-$/g, "") || "board";
   const id = `${slug}-${randomBytes(2).toString("hex")}`;
 
-  addBoard(id, {
+  addBoard(id, person.id, {
     name,
     blurb: values.blurb,
     readyToRide: values.ready === "yes",

@@ -76,11 +76,12 @@ Then start it again with `npm run dev`.
 
 - **Home** (http://localhost:3000): the newest boards.
 - **Adopt** (http://localhost:3000/boards): all boards, with filters for "Ready to ride" and "Needs some love".
-- **Give a board** (http://localhost:3000/give): list a board with a photo. You land on its profile page.
+- **Give a board** (http://localhost:3000/give): first confirm your phone or email, then list a board with a photo. You land on its profile page.
+- **📬 Pretend inbox** (http://localhost:3000/inbox): the site doesn't send real emails or texts. Every message it *would* send shows up here instead, like your 6-digit sign-in code. Use any phone number or email you like; nothing is really sent.
 
 ## Where your test boards are saved
 
-Boards and photos you add are saved in the `data` folder inside the project. Only on your Mac, never uploaded.
+Boards, photos, sign-ins and pretend-inbox messages are saved in the `data` folder inside the project. Only on your Mac, never uploaded.
 
 To start fresh, stop the website, delete the `data` folder, and start it again. You'll get the three example boards back.
 

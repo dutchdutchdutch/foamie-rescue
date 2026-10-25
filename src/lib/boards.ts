@@ -63,11 +63,11 @@ export function getBoard(id: string): Board | null {
 
 export type NewBoard = Pick<Board, "name" | "blurb" | "readyToRide" | "lengthFt" | "brand" | "town" | "zip" | "photo">;
 
-export function addBoard(id: string, b: NewBoard) {
+export function addBoard(id: string, ownerId: number, b: NewBoard) {
   db.prepare(`
-    INSERT INTO boards (id, name, blurb, ready_to_ride, length_ft, brand, town, zip, photo, created_at)
-    VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?)
-  `).run(id, b.name, b.blurb, b.readyToRide ? 1 : 0, b.lengthFt, b.brand, b.town, b.zip, b.photo, new Date().toISOString());
+    INSERT INTO boards (id, owner_id, name, blurb, ready_to_ride, length_ft, brand, town, zip, photo, created_at)
+    VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?)
+  `).run(id, ownerId, b.name, b.blurb, b.readyToRide ? 1 : 0, b.lengthFt, b.brand, b.town, b.zip, b.photo, new Date().toISOString());
 }
 
 export function daysListed(board: Board, now = Date.now()) {

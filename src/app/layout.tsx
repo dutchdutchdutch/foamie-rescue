@@ -1,5 +1,7 @@
 import type { Metadata } from "next";
 import Link from "next/link";
+import { Suspense } from "react";
+import { AccountLinks } from "@/components/AccountLinks";
 import { site } from "@/lib/site";
 import "./globals.css";
 
@@ -24,6 +26,13 @@ export default function RootLayout({ children }: LayoutProps<"/">) {
               <Link href="/give" className="rounded-full px-3 py-2 text-sea-dark hover:bg-sand">
                 Give a board
               </Link>
+              <Link href="/inbox" className="rounded-full px-3 py-2 text-sea-dark hover:bg-sand" title="Pretend inbox">
+                <span aria-hidden="true">📬</span>
+                <span className="sr-only">Pretend inbox</span>
+              </Link>
+              <Suspense>
+                <AccountLinks />
+              </Suspense>
             </div>
           </nav>
         </header>

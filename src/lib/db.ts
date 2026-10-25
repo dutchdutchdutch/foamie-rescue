@@ -27,7 +27,31 @@ function open() {
       is_example INTEGER NOT NULL DEFAULT 0,
       created_at TEXT NOT NULL
     );
+    CREATE TABLE IF NOT EXISTS people (
+      id INTEGER PRIMARY KEY,
+      contact TEXT NOT NULL UNIQUE, -- an email address or a phone number like +17145550123
+      created_at TEXT NOT NULL
+    );
+    CREATE TABLE IF NOT EXISTS codes (
+      contact TEXT PRIMARY KEY,
+      code TEXT NOT NULL,
+      tries INTEGER NOT NULL DEFAULT 0,
+      expires_at TEXT NOT NULL
+    );
+    CREATE TABLE IF NOT EXISTS sessions (
+      token TEXT PRIMARY KEY,
+      person_id INTEGER NOT NULL REFERENCES people(id),
+      created_at TEXT NOT NULL
+    );
+    CREATE TABLE IF NOT EXISTS outbox (
+      id INTEGER PRIMARY KEY,
+      to_contact TEXT NOT NULL,
+      subject TEXT NOT NULL,
+      body TEXT NOT NULL,
+      created_at TEXT NOT NULL
+    );
   `);
+  addColumnIfMissing(db, "boards", "owner_id", "INTEGER REFERENCES people(id)");
   const { count } = db.prepare("SELECT COUNT(*) AS count FROM boards").get() as { count: number };
   if (count === 0) addExamples(db);
   return db;
@@ -36,6 +60,12 @@ function open() {
 // Reuse one connection, even when the dev server reloads this file.
 const globalForDb = globalThis as unknown as { foamieDb?: DatabaseSync };
 export const db = globalForDb.foamieDb ?? (globalForDb.foamieDb = open());
+
+// Databases made by an older version of the site are missing newer columns.
+function addColumnIfMissing(db: DatabaseSync, table: string, column: string, type: string) {
+  const columns = db.prepare(`PRAGMA table_info(${table})`).all() as { name: string }[];
+  if (!columns.some((c) => c.name === column)) db.exec(`ALTER TABLE ${table} ADD COLUMN ${column} ${type}`);
+}
 
 function addExamples(db: DatabaseSync) {
   const insert = db.prepare(`

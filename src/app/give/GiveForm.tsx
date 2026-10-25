@@ -1,14 +1,13 @@
 "use client";
 
 import { useActionState } from "react";
+import { FormError, inputClass as input, SubmitButton } from "@/components/forms";
 import { listBoard, type GiveState } from "./actions";
 
 const towns = [
   "Huntington Beach", "Newport Beach", "Costa Mesa", "Laguna Beach", "Dana Point", "San Clemente",
   "Seal Beach", "Sunset Beach", "Irvine", "Fountain Valley", "Laguna Niguel", "San Juan Capistrano",
 ];
-
-const input = "w-full rounded-2xl border-2 border-gray-200 px-4 py-2.5 focus:border-sea focus:outline-none";
 
 export function GiveForm() {
   const [state, action, pending] = useActionState<GiveState, FormData>(listBoard, {});
@@ -17,11 +16,7 @@ export function GiveForm() {
   return (
     // The key resets the fields to the last typed values after an error.
     <form action={action} key={JSON.stringify(v)} className="mt-8 flex flex-col gap-6">
-      {state.error && (
-        <p role="alert" className="rounded-2xl bg-coral/10 p-4 font-bold text-coral">
-          {state.error}
-        </p>
-      )}
+      <FormError message={state.error} />
 
       <Field label="Photo of the board" hint="Required. One clear photo of the whole board.">
         <input name="photo" type="file" accept="image/jpeg,image/png,image/webp,image/heic" required className={input} />
@@ -66,13 +61,9 @@ export function GiveForm() {
         <textarea name="blurb" maxLength={200} rows={3} defaultValue={v.blurb} className={input} />
       </Field>
 
-      <button
-        type="submit"
-        disabled={pending}
-        className="self-start rounded-full bg-cta px-8 py-3 text-lg font-bold text-white hover:bg-cta-dark disabled:opacity-60"
-      >
-        {pending ? "Listing…" : "List my board"}
-      </button>
+      <SubmitButton pending={pending} pendingText="Listing…">
+        List my board
+      </SubmitButton>
     </form>
   );
 }
