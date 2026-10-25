@@ -3,15 +3,28 @@
 @theme {
   --color-sand: #fff8ec;
   --color-sun: #f2994a;
-  --color-sun-dark: #d9772a;
+  --color-sun-dark: #b45309;
+  /* Button orange. Darker than "sun" so white text on it is easy to read. */
+  --color-cta: #c2410c;
+  --color-cta-dark: #9a3412;
   --color-sea: #1f6f8b;
   --color-sea-dark: #164e63;
-  --color-kelp: #2f9e63;
-  --color-coral: #e5674e;
+  --color-kelp: #1e7a4a;
+  --color-coral: #c2412b;
+  --color-ink: #1f2937;
   --font-sans: ui-rounded, "SF Pro Rounded", system-ui, -apple-system, "Segoe UI", sans-serif;
 }
 
+html {
+  scroll-behavior: smooth;
+}
+
 body {
-  background: #ffffff;
-  color: #1f2937;
+  background: var(--color-white);
+  color: var(--color-ink);
+}
+
+:focus-visible {
+  outline: 3px solid var(--color-sea);
+  outline-offset: 3px;
 }
